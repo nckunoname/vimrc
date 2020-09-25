@@ -1,0 +1,334 @@
+" Vim with all enhancements
+source $VIMRUNTIME/vimrc_example.vim
+
+" Use the internal diff if available.
+" Otherwise use the special 'diffexpr' for Windows.
+if &diffopt !~# 'internal'
+  set diffexpr=MyDiff()
+endif
+function MyDiff()
+  let opt = '-a --binary '
+  if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
+  if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
+  let arg1 = v:fname_in
+  if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
+  let arg1 = substitute(arg1, '!', '\!', 'g')
+  let arg2 = v:fname_new
+  if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
+  let arg2 = substitute(arg2, '!', '\!', 'g')
+  let arg3 = v:fname_out
+  if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
+  let arg3 = substitute(arg3, '!', '\!', 'g')
+  if $VIMRUNTIME =~ ' '
+    if &sh =~ '\<cmd'
+      if empty(&shellxquote)
+        let l:shxq_sav = ''
+        set shellxquote&
+      endif
+      let cmd = '"' . $VIMRUNTIME . '\diff"'
+    else
+      let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
+    endif
+  else
+    let cmd = $VIMRUNTIME . '\diff'
+  endif
+  let cmd = substitute(cmd, '!', '\!', 'g')
+  silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3
+  if exists('l:shxq_sav')
+    let &shellxquote=l:shxq_sav
+  endif
+endfunction
+
+"設定檔案程式編碼utf8
+
+set encoding=utf-8
+
+set termencoding=utf-8
+
+set fileencoding=utf-8
+
+set fileencodings=ucs-bom,utf-8,chinese,cp936
+
+ 
+
+"vim的選單亂碼解決
+
+source $VIMRUNTIME/delmenu.vim
+
+source $VIMRUNTIME/menu.vim
+
+ 
+
+"vim提示資訊亂碼解決
+
+language messages zh_CN.utf-8
+
+ 
+
+filetype on
+
+filetype plugin indent on
+
+"配色方案
+
+"colorscheme evening
+
+colorscheme torte
+
+"colorscheme desert
+
+"設定中文幫助
+
+set helplang=cn
+
+"保留歷史紀錄
+
+set history=500
+
+"設定字型為Monaco, 大小10
+
+"set guifont=Monaco:h10
+
+"set guifont=Fixedsys:h9
+
+set guifont=Consolas:h10
+
+"行與行的字卡在一起
+
+"set linespace=2
+
+" gvim 視窗大小
+
+set lines=40
+
+set columns=100
+
+"設定tab的跳數, tap用兩個space取代
+
+set tabstop=2
+
+" 程式縮排所需要的space個數，我們使用shiftwidth
+
+set shiftwidth=2
+
+"使用空白鍵(space)取代tab
+
+set expandtab
+
+"原本文件中的tab不會有改變，為了取代原有的tab到新的設定，我們必須鍵入
+
+" :retab
+
+" 設定顯示行數
+
+set nu
+
+" 自動設定當前目錄為正在編輯的目錄
+
+set autochdir
+
+" 自動隱藏沒有儲存的緩衝區，切換buffer時，不提示是否儲存當前buffer的提示
+
+" set hidden
+
+" 當游標接近底端或頂端時，自動下滾或上滾
+
+set scrolloff=5
+
+" 設定顯示標籤欄
+
+set showtabline=2
+
+" 設定當檔案在外部被修改，自動更新該檔案
+
+" set autoread
+
+" 設定不生成備份檔案
+
+set nobackup
+
+ 
+
+"===================
+
+" 查詢/替換相關設定
+
+"===================
+
+" 高亮顯示查詢結果
+
+set hlsearch
+
+" 增量查詢
+
+set incsearch
+
+ 
+
+"===================
+
+"狀態列的設定
+
+"===================
+
+" 顯示檔名:總行數, 總字元數
+
+set statusline=[%F]%y%r%m%*%=[Line:%l/%L,Column:%c][%p%%]
+
+" 在編輯過程中，在右下角顯示游標位置的狀態行
+
+set ruler
+
+ 
+
+" 開啟語法高亮
+
+syntax enable
+
+syntax on
+
+" 設定匹配模式, 相當於括號匹配
+
+set showmatch
+
+" 智慧對齊
+
+set smartindent
+
+" 設定自動縮排
+
+set ai
+
+" 設定高亮當前行
+
+" set cursorcolumn
+
+" 設定高亮當前列
+
+" set cursorline
+
+hi Cursorline cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
+
+" 設定游標不閃爍
+
+" set guicursor+=a:blinkon0
+
+" foldmethod
+
+" set fdm=indent "
+
+" set fdm=manual
+
+ 
+
+" 開關nerdtree的快速鍵
+
+map <F5> :NERDTreeToggle<CR>
+
+" map <leader>t :NERDTreeToggle<CR>
+
+" <leader>t == \t
+
+" 顯示行號
+
+let NERDTreeShowLineNumbers=1
+
+let NERDTreeAutoCenter=1
+
+" 是否顯示隱藏檔案
+
+let NERDTreeShowHidden=1
+
+" 設定寬度
+
+let NERDTreeWinSize=31
+
+" echo NERDTreeWinSize
+
+" 在終端啟動vim時，共享NERDTree
+
+let g:nerdtree_tabs_open_on_console_startup=1
+
+" 忽略以下檔案的顯示
+
+let NERDTreeIgnore=['\.pyc','\~$','\.swp']
+
+"顯示書籤列表
+
+let NERDTreeShowBookmarks=1
+
+ 
+
+" insert operate remap: map the key sequence {lhs} to {rhs}
+
+inoremap ( ()<Esc>i
+
+inoremap {<CR> {<CR><BS><BS>}<Esc>ko
+
+inoremap {{ {}<Esc>i
+
+inoremap [ []<Esc>i
+
+inoremap < <><Esc>i
+
+inoremap " ""<Esc>i
+
+inoremap ' ''<Esc>i
+
+ 
+
+" 快速放大/縮小字體
+
+let s:pattern = '^\(..*\):h\([1-9][0-9]*\)$'
+
+let s:minfontsize = 6
+
+let s:maxfontsize = 16
+
+ 
+
+function! AdjustFontSize(amount)
+
+  "if has("gui_gtk2") && has("gui_running")
+
+    let fontname = substitute(&guifont, s:pattern, '\1', '')
+
+    let fontsize = substitute(&guifont, s:pattern, '\2', '')
+
+    if (fontsize < s:minfontsize) || (fontsize > s:maxfontsize)
+
+      let fontsize = 10
+
+    endif
+
+    let newsize = fontsize + a:amount
+
+    if (a:amount > 1)
+
+      let newsize = a:amount
+
+    endif
+
+    if (newsize >= s:minfontsize) && (newsize <= s:maxfontsize)
+
+      let newfont = fontname . ":h" . newsize
+
+      let &guifont = newfont
+
+    endif
+
+  "else
+
+  "  echoerr "You need to run the GTK2 version of vim to use this function"
+
+  "endif
+
+endfunction
+
+ 
+
+map <C-Up> :call AdjustFontSize(1) <CR>
+
+map <C-Down> :call AdjustFontSize(-1) <CR>
+
+map <C-Home> :call AdjustFontSize(10) <CR>
